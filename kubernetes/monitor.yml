@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: a01monitor-sample
+spec:
+  template:
+    spec:
+      containers:
+      - name: monitor
+        image: azureclidev.azurecr.io/a01monitor:0.0.2
+        env:
+        - name: A01_REPORT_RUN_ID
+          value: '29'
+        - name: A01_REPORT_INTERVAL
+          value: '15'
+        - name: A01_STORE_NAME
+          value: task-store-web-service-internal
+        - name: A01_INTERNAL_COMKEY
+          valueFrom:
+            secretKeyRef:
+              name: a01store-internal-communication-key
+              key: key
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: azureclidev-acr
+  backoffLimit: 4
