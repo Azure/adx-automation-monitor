@@ -51,10 +51,10 @@ def send_report(tasks: list, run: dict) -> None:
     smtp_server = os.environ.get('A01_REPORT_SMTP_SERVER', None)
     smtp_user = os.environ.get('A01_REPORT_SENDER_ADDRESS', None)
     smtp_pass = os.environ.get('A01_REPORT_SENDER_PASSWORD', None)
-    receivers = os.environ.get('A01_REPORT_RECEIVER', '')
+    receivers = os.environ.get('A01_REPORT_RECEIVER', None)
 
-    if not smtp_server or not smtp_user or not smtp_pass:
-        logger.warning('Missing SMTP cred. Skip sending email.')
+    if not smtp_server or not smtp_user or not smtp_pass or not receivers:
+        logger.warning('Skip sending email.')
         sys.exit(1)
 
     statuses = defaultdict(lambda: 0)
