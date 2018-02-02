@@ -1,16 +1,17 @@
 import sys
 import os
 import time
-import requests
 import itertools
-import coloredlogs
 import logging
 from collections import OrderedDict
+
+import coloredlogs
+import requests
 
 from kubernetes import client, config
 
 
-class InternalAuth(object):
+class InternalAuth(object):  # pylint: disable=too-few-public-methods
     def __call__(self, req):
         req.headers['Authorization'] = os.environ['A01_INTERNAL_COMKEY']
         return req
@@ -25,13 +26,13 @@ def main(store: str, run: str, sleep: int = 5, local: bool = False) -> None:
         resp = session.get(f'{store}/run/{run}/tasks')
         resp.raise_for_status()
 
-        def get_status(r: dict) -> str:
-            return r['status']
+        def get_status(task: dict) -> str:
+            return task['status']
 
         tasks = sorted(resp.json(), key=get_status)
         status = OrderedDict()
-        for st, rec in itertools.groupby(tasks, key=get_status):
-            status[st] = list(rec)
+        for status_name, rec in itertools.groupby(tasks, key=get_status):
+            status[status_name] = list(rec)
 
         logger.info('|'.join([f'{k}={len(v)}' for k, v in status.items()]))
 
@@ -49,7 +50,7 @@ def main(store: str, run: str, sleep: int = 5, local: bool = False) -> None:
                 pod = next(pod for pod in active_pods if pod.metadata.name == pod_name)
                 if pod.status.phase != 'Running':
                     # When the task is scheduled to run on a pod but the pod is not running, the task is lost.
-                    # TODO: resubmit the task - need improve in a01store
+                    # Resubmit the task - need improve in a01store
                     lost_task.append(running_task['id'])
 
         if 'initialized' not in status:
@@ -78,8 +79,8 @@ def get_store_uri(store_uri: str, local: bool = False) -> str:
 
 def get_namespace():
     try:
-        with open('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'r') as fq:
-            return fq.read().strip()
+        with open('/var/run/secrets/kubernetes.io/serviceaccount/namespace', 'r') as file_handle:
+            return file_handle.read().strip()
     except IOError:
         pass
 
@@ -87,6 +88,7 @@ def get_namespace():
 
 
 if __name__ == '__main__':
+    # pylint: disable=invalid-name
     coloredlogs.install(level=logging.INFO)
     logger = logging.getLogger('a01report')
 
