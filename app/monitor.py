@@ -55,7 +55,7 @@ def send_report(tasks: list, run: dict) -> None:
 
     if not smtp_server or not smtp_user or not smtp_pass or not receivers:
         logger.warning('Skip sending email.')
-        sys.exit(1)
+        sys.exit(0)
 
     statuses = defaultdict(lambda: 0)
     results = defaultdict(lambda: 0)
