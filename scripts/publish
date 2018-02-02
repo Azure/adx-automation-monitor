@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+version=$1
+
+if [ -z $version ]; then
+    echo "Skip publish since the version is not given."
+    exit 0
+fi
+
+server=azureclidev.azurecr.io
+name=a01monitor
+image=$server/$name:$version
+image_latest=$server/$name:latest
+
+set -e
+
+docker login $server -u $AZURECLIDEV_ACR_SP_USERNAME -p $AZURECLIDEV_ACR_SP_PASSWORD
+docker pull $image >/dev/null 2>&1 && (echo The image $image already exists. >&2; exit 1)
+
+docker build -t $image .
+docker push $image
+
+docker tag $image $image_latest
+docker push $image_latest
+docker rmi $image_latest
