@@ -3,4 +3,4 @@ FROM python:3.6-jessie
 COPY ./app /app
 RUN pip install -r /app/requirements.txt
 
-CMD python /app/prototype.py
+CMD python /app/monitor.py
