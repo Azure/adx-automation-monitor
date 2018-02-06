@@ -172,7 +172,7 @@ def main(store: str, run: str, sleep: int = 5, local: bool = False) -> None:
                 send_report(tasks, session.get(f'{store}/run/{run}').json())
                 sys.exit(0)
             elif len(status['scheduled']) - len(lost_task) == 0:
-                lost_tasks = ', '.join(lost_task)
+                lost_tasks = ', '.join([str(task_id) for task_id in lost_task])
                 logger.warning(f'Despite tasks {lost_tasks} are lost. Run {run_id} is finished.')
                 send_report(tasks, session.get(f'{store}/run/{run}').json())
                 sys.exit(0)
