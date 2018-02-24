@@ -108,7 +108,7 @@ def send_report(tasks: list, run: dict) -> None:
             <code>
             $ virtualenv env --python=python3.6 <br>
             $ . env/bin/activate <br>
-            $ pip install https://github.com/troydai/a01client/releases/download/0.4.0/a01ctl-0.4.0-py3-none-any.whl<br>
+            $ pip install https://a01tools.blob.core.windows.net/client/adx_automation_cli_latest.whl<br>
             $ a01 login<br>
             $ a01 get runs -l {run['id']}<br>
             </code>
