@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block head %}
+    {{ super() }}
+    <meta http-equiv="refresh" content="3;{{ auth_link }}"/>
+{% endblock %}
+{% block body %}
+    <p class="lead">You are authenticated, therefore, redirected to the log in page ... </p>
+    <p>If this page doesn't redirect in 3 seconds, follows this <a href="{{ auth_link }}">link</a> to log in.</p>
+{% endblock %}

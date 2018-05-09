@@ -6,5 +6,11 @@ services:
 install:
 - pip install -r requirements.txt
 script:
-- pylint app
-- scripts/publish $TRAVIS_TAG
+- pylint app/app
+deploy:
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^dev|master$
+  provider: script
+  script: scripts/publish
+  
