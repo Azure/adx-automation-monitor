@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+build=$1
+branch=$2
+
+
+echo "apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: monitor
+  labels:
+    system: a01
+    group: base
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: monitor
+    spec:
+      containers:
+      - name: main
+        image: adxautomationbase.azurecr.io/monitor:$branch-$build
+        ports:
+        - containerPort: 80
+        env:
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: monitor-secrets
+              key: secret_key
+        - name: AZURE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: monitor-secrets
+              key: client_id
+        - name: AZURE_CLIENT_TENANT
+          valueFrom:
+            secretKeyRef:
+              name: monitor-secrets
+              key: client_tenant
+        - name: AZURE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: monitor-secrets
+              key: client_secret
+        - name: AZURE_CLIENT_RESOURCE
+          valueFrom:
+            secretKeyRef:
+              name: monitor-secrets
+              key: client_resource
+      imagePullSecrets:
+      - name: monitor-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitor
+  labels:
+    system: a01
+    group: base
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: monitor
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: store-ingress
+  labels:
+    system: a01
+    group: base
+  annotations:
+    kubernetes.io/ingress.class: \"nginx\"
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - secretName: store-tls
+    hosts:
+    - secondapi.azclitest.com
+  rules:
+  - host: secondapi.azclitest.com
+    http:
+      paths:
+      - path: /monitor
+        backend:
+          serviceName: monitor
+          servicePort: 80
+" | kubectl apply --namespace a01-monitor-$branch -f -
