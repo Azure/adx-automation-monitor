@@ -39,7 +39,7 @@ def unauthorized_handler():
 
 @app.route(APP_ROOT + '/login')
 def login():
-    return render_template('login.html', auth_link=get_authorization_url())
+    return render_template('login.html', auth_link=get_authorization_url(url_for('index')))
 
 
 @app.route(APP_ROOT + '/logout')
