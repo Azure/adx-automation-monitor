@@ -17,5 +17,5 @@ deploy:
     all_branches: true
     condition: $TRAVIS_BRANCH =~ ^dev|master$
   provider: script
-  script: scripts/publish
+  script: scripts/publish && scripts/deploy
   
