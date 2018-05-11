@@ -1,19 +1,16 @@
 #!/usr/bin/env bash
 
-AZ_REPO=$(lsb_release -cs)
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
-     tee /etc/apt/sources.list.d/azure-cli.list
+az login --service-principal -u $AKS_MANAGE_SP_NAME \
+                             -p $AKS_MANAGE_SP_PASS \
+                             -t $AKS_MANAGE_SP_TENANT
 
-apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
-apt-get install apt-transport-https
-apt-get update && sudo apt-get install azure-cli
 
-az
+az aks install-cli
+az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG
 
-exit 0
 
-build=$1
-branch=$2
+build=$TRAVIS_BUILD_NUMBER
+branch=$TRAVIS_BRANCH
 
 
 echo "apiVersion: apps/v1beta1
