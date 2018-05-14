@@ -11,9 +11,9 @@
         </tr>
         {% for run in runs %}
             <tr>
-                <td> {{ run.id }} </td>
-                <td> {{ run.name }} </td>
-                <td> {{ run.status }} </td>
+                <td><a href="{{ url_for('run', run_id=run.id) }}">{{ run.id }}</a></td>
+                <td>{{ run.name }}</td>
+                <td>{{ run.status }}</td>
             </tr>
         {% endfor %}
         </tbody>

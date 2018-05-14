@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+    <p class="lead center-align">Only failures are shown</p>
+    <table class="condense">
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td> {{ task.id }} </td>
+                <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 40rem"> {{ task.name }} </td>
+                <td> {{ task.result }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#    <div class="center-align">#}
+    {#        <ul class="pagination">#}
+    {#            <li><a href="{{ previous_page }}"><i class="material-icons">chevron_left</i></a></li>#}
+    {#            <li class="active"><a href="#!">{{ page }}</a></li>#}
+    {#            <li><a href="{{ next_page }}"><i class="material-icons">chevron_right</i></a></li>#}
+    {#        </ul>#}
+    {#    </div>#}
+{% endblock %}

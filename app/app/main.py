@@ -82,6 +82,19 @@ def runs():
                            next_page=url_for('runs', page=page + 1))
 
 
+@app.route('/run/<int:run_id>')
+@login_required
+def run(run_id: int):
+    this_run = Run.query.filter_by(id=run_id).first()
+    if not this_run:
+        return 404
+
+    tasks = [t for t in this_run.tasks if t.result != 'Passed']
+    tasks = sorted(tasks, key=lambda t: t.name)
+
+    return render_template('run.html', tasks=tasks)
+
+
 @app.route('/help', methods=['GET'])
 def help_page():
     return render_template('help.html')
