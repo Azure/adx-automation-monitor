@@ -11,7 +11,7 @@ az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG
 
 build=$TRAVIS_BUILD_NUMBER
 branch=$TRAVIS_BRANCH
-host_env=A01_HOST_TARGET_$branch
+host_env=A01_TARGET_HOST_$branch
 host_target=${!host_env}
 
 
