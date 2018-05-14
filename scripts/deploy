@@ -5,7 +5,7 @@ az login --service-principal -u $AKS_MANAGE_SP_NAME \
                              -t $AKS_MANAGE_SP_TENANT
 
 
-az aks install-cli --install-location ./
+az aks install-cli --install-location ./kubectl
 az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG 
 
 
