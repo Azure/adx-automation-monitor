@@ -6,7 +6,7 @@ az login --service-principal -u $AKS_MANAGE_SP_NAME \
 
 
 az aks install-cli
-az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG
+az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG --install-location ./
 
 
 build=$TRAVIS_BUILD_NUMBER
@@ -98,4 +98,4 @@ spec:
         backend:
           serviceName: monitor
           servicePort: 80
-" | kubectl apply --namespace a01-monitor-$branch -f -
+" | ./kubectl apply --namespace a01-monitor-$branch -f -
