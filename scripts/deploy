@@ -11,6 +11,8 @@ az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG
 
 build=$TRAVIS_BUILD_NUMBER
 branch=$TRAVIS_BRANCH
+host_env=A01_HOST_TARGET_$branch
+host_target=${!host_env}
 
 
 echo "apiVersion: apps/v1beta1
@@ -89,12 +91,12 @@ spec:
   tls:
   - secretName: store-tls
     hosts:
-    - secondapi.azclitest.com
+    - $host_target
   rules:
-  - host: secondapi.azclitest.com
+  - host: $host_target
     http:
       paths:
-      - path: /monitor
+      - path:
         backend:
           serviceName: monitor
           servicePort: 80

@@ -10,8 +10,6 @@ from app.auth import get_authorization_url, acquire_token, get_logout_uri
 
 # pylint: disable=invalid-name
 
-APP_ROOT = "/monitor"
-
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'local_test')
 
@@ -37,18 +35,18 @@ def unauthorized_handler():
     return redirect(url_for('login', requiest_uri=request.path))
 
 
-@app.route(APP_ROOT + '/login')
+@app.route('/login')
 def login():
     return render_template('login.html', auth_link=get_authorization_url(url_for('index')))
 
 
-@app.route(APP_ROOT + '/logout')
+@app.route('/logout')
 def logout():
     logout_user()
     return redirect(get_logout_uri())
 
 
-@app.route(APP_ROOT + '/login_callback', methods=['GET'])
+@app.route('/login_callback', methods=['GET'])
 def login_callback():
     code, state = request.args['code'], request.args['state']
     token = acquire_token(code)
@@ -61,12 +59,12 @@ def login_callback():
     return redirect(state)
 
 
-@app.route(APP_ROOT)
+@app.route('/')
 @login_required
 def index():
     return render_template('index.html')
 
 
-@app.route(APP_ROOT + '/help', methods=['GET'])
+@app.route('/help', methods=['GET'])
 def help_page():
     return render_template('help.html')
