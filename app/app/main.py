@@ -5,13 +5,18 @@ import datetime
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_login import LoginManager, login_required, login_user, logout_user
 
-from app.models import User
+from app.models import User, db, Run, Task
 from app.auth import get_authorization_url, acquire_token, get_logout_uri
 
 # pylint: disable=invalid-name
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'local_test')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['A01_DATABASE_URI']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -63,6 +68,18 @@ def login_callback():
 @login_required
 def index():
     return render_template('index.html')
+
+
+@app.route('/runs')
+@login_required
+def runs():
+    page_size = 20
+    page = int(request.args.get('page', 1))
+    query = Run.query.order_by(Run.creation.desc()).offset(page_size * (page - 1)).limit(20)
+
+    return render_template('runs.html', runs=query, page=page,
+                           previous_page=url_for('runs', page=max(page - 1, 1)),
+                           next_page=url_for('runs', page=page + 1))
 
 
 @app.route('/help', methods=['GET'])

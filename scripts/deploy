@@ -35,6 +35,11 @@ spec:
         ports:
         - containerPort: 80
         env:
+        - name: A01_DATABASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: monitor-secrets
+              key: dburi 
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:

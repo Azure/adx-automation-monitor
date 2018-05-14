@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+    <table class="condense">
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+        {% for run in runs %}
+            <tr>
+                <td> {{ run.id }} </td>
+                <td> {{ run.name }} </td>
+                <td> {{ run.status }} </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="center-align">
+        <ul class="pagination">
+            <li><a href="{{ previous_page }}"><i class="material-icons">chevron_left</i></a></li>
+            <li class="active"><a href="#!">{{ page }}</a></li>
+            <li><a href="{{ next_page }}"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
+{% endblock %}
