@@ -1,4 +1,4 @@
-# pylint: disable=unused-import
+# pylint: disable=unused-import, too-few-public-methods
 
 from flask_sqlalchemy import SQLAlchemy
 

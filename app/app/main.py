@@ -5,7 +5,7 @@ import datetime
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_login import LoginManager, login_required, login_user, logout_user
 
-from app.models import User, db, Run, Task
+from app.models import User, db, Run
 from app.auth import get_authorization_url, acquire_token, get_logout_uri
 
 # pylint: disable=invalid-name
