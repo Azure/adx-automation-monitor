@@ -6,12 +6,32 @@
         <title>A01 Automation</title>
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='styles/main.css') }}">
     {% endblock %}
 </head>
 <body>
+<nav>
+    <div class="nav-wrapper container">
+        <a href="/" class="brand-logo">A01 Automation</a>
+        <ul class="right">
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('profile') }}">{{ current_user.user_name }}</a></li>
+            {% else %}
+                <a href="{{ url_for('login') }}">Log in</a>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
 <div class="container">
-    {% block body %}
-    {% endblock %}
+    {% if current_user.is_authenticated %}
+        {% block body %}
+        {% endblock %}
+    {% else %}
+        <p class="lead">You are not authenticated. Please use the log in link in the upper right of the page to navigate
+            to the log in page.</p>
+        <p class="lead">This page may redirect to the log in page, automatically in 3 seconds.</p>
+    {% endif %}
 </div>
 </body>
 </html>

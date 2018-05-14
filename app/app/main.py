@@ -68,3 +68,8 @@ def index():
 @app.route('/help', methods=['GET'])
 def help_page():
     return render_template('help.html')
+
+
+@app.route('/profile', methods=['GET'])
+def profile():
+    return render_template('profile.html')
