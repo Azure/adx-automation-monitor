@@ -79,7 +79,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: store-ingress
+  name: monitor-ingress
   labels:
     system: a01
     group: base
@@ -89,7 +89,7 @@ metadata:
     ingress.kubernetes.io/rewrite-target: /
 spec:
   tls:
-  - secretName: store-tls
+  - secretName: monitor-tls
     hosts:
     - $host_target
   rules:
