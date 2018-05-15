@@ -1,28 +1,36 @@
 {% extends "layout.html" %}
 {% block body %}
-    <table class="condense">
-        <thead>
-        </thead>
-        <tbody>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-        </tr>
-        {% for run in runs %}
+    <div class="container-fluid">
+        <table class="table table-hover table-sm">
+            <thead>
             <tr>
-                <td><a href="{{ url_for('run', run_id=run.id) }}">{{ run.id }}</a></td>
-                <td>{{ run.name }}</td>
-                <td>{{ run.status }}</td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="center-align">
-        <ul class="pagination">
-            <li><a href="{{ previous_page }}"><i class="material-icons">chevron_left</i></a></li>
-            <li class="active"><a href="#!">{{ page }}</a></li>
-            <li><a href="{{ next_page }}"><i class="material-icons">chevron_right</i></a></li>
-        </ul>
+            </thead>
+            <tbody>
+            {% for run in runs %}
+                <tr>
+                    <td><a href="{{ url_for('run', run_id=run.id) }}">{{ run.id }}</a></td>
+                    <td>{{ run.name }}</td>
+                    <td>{{ run.status }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_previous %}
+                        <li class="page-item"><a class="page-link" href="{{ page_previous }}">Previous</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ page_next }}">Next</a></li>
+                </ul>
+            </nav>
+        </div>
     </div>
 {% endblock %}

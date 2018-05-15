@@ -1,9 +1,10 @@
 # pylint: disable=unused-import, too-few-public-methods
 
+import json
+
 from flask_sqlalchemy import SQLAlchemy
 
 from .user import User
-
 
 db = SQLAlchemy()  # pylint: disable=invalid-name
 
@@ -62,3 +63,29 @@ class Task(db.Model):
     # relationship
     run_id = db.Column(db.Integer, db.ForeignKey('run.id'), nullable=False)
     run = db.relationship('Run', backref=db.backref('tasks', cascade='all, delete-orphan', lazy=True))
+
+    def __init__(self, *args, **kwargs):
+        super(Task, self).__init__(*args, **kwargs)
+        self._settings = None
+
+    @property
+    def identifier(self) -> str:
+        return self.settings_in_json['classifier']['identifier']  # pylint: disable=unsubscriptable-object
+
+    @property
+    def log_path(self) -> str:
+        return self.result_in_json['a01.reserved.tasklogpath']  # pylint: disable=unsubscriptable-object
+
+    @property
+    def settings_in_json(self) -> dict:
+        if not hasattr(self, '_settings'):
+            setattr(self, '_settings', json.loads(self.settings))
+
+        return getattr(self, '_settings')
+
+    @property
+    def result_in_json(self) -> dict:
+        if not hasattr(self, '_result'):
+            setattr(self, '_result', json.loads(self.result_details))
+
+        return getattr(self, '_result')
