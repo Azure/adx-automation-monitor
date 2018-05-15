@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <table class="table table-sm table-hover ml-1 mb-1 mr-1">
-                <thead class="thead-dark">
+                <thead>
                 <tr>
                     <th>ID</th>
                     <th>Identifier</th>
@@ -46,6 +46,18 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="row mt-5">
+            {% for t in tasks %}
+                {% if t.id in logs %}
+                    <div class="col ml-1 mt-1">
+                        <p class="lead">{{ t.identifier }}</p>
+                        <div class="log">
+                            <pre><code>{{ logs[t.id] }}</code></pre>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

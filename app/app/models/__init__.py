@@ -73,8 +73,19 @@ class Task(db.Model):
         return self.settings_in_json['classifier']['identifier']  # pylint: disable=unsubscriptable-object
 
     @property
+    def log_path(self) -> str:
+        return self.result_in_json['a01.reserved.tasklogpath']  # pylint: disable=unsubscriptable-object
+
+    @property
     def settings_in_json(self) -> dict:
         if not hasattr(self, '_settings'):
             setattr(self, '_settings', json.loads(self.settings))
 
         return getattr(self, '_settings')
+
+    @property
+    def result_in_json(self) -> dict:
+        if not hasattr(self, '_result'):
+            setattr(self, '_result', json.loads(self.result_details))
+
+        return getattr(self, '_result')

@@ -3,6 +3,7 @@ import os
 import datetime
 import re
 
+import requests
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_login import LoginManager, login_required, login_user, logout_user
 
@@ -94,20 +95,24 @@ def run(run_id: int):
     if not this_run:
         return 404
 
-    show_all = request.args.get('show_all', 'False') == 'True'
+    show_log = request.args.get('logs', 'False') == 'true'
     query = request.args.get('query', '')
 
-    if show_all:
-        tasks = this_run.tasks
-    else:
-        tasks = [t for t in this_run.tasks if t.result != 'Passed']
+    tasks = [t for t in this_run.tasks if t.result != 'Passed']
 
     if query:
         tasks = [t for t in tasks if re.search(query, t.identifier)]
 
+    logs = dict()
+    if show_log:
+        for t in tasks:
+            resp = requests.get(t.log_path)
+            if resp.status_code < 300:
+                logs[t.id] = resp.text
+
     tasks = sorted(tasks, key=lambda t: t.name)
 
-    return render_template('run.html', tasks=tasks, show_all=show_all, query=query)
+    return render_template('run.html', tasks=tasks, logs=logs, query=query)
 
 
 @app.route('/help', methods=['GET'])
