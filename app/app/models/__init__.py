@@ -1,9 +1,10 @@
 # pylint: disable=unused-import, too-few-public-methods
 
+import json
+
 from flask_sqlalchemy import SQLAlchemy
 
 from .user import User
-
 
 db = SQLAlchemy()  # pylint: disable=invalid-name
 
@@ -62,3 +63,18 @@ class Task(db.Model):
     # relationship
     run_id = db.Column(db.Integer, db.ForeignKey('run.id'), nullable=False)
     run = db.relationship('Run', backref=db.backref('tasks', cascade='all, delete-orphan', lazy=True))
+
+    def __init__(self, *args, **kwargs):
+        super(Task, self).__init__(*args, **kwargs)
+        self._settings = None
+
+    @property
+    def identifier(self) -> str:
+        return self.settings_in_json['classifier']['identifier']
+
+    @property
+    def settings_in_json(self) -> dict:
+        if not hasattr(self, '_settings'):
+            setattr(self, '_settings', json.loads(self.settings))
+
+        return getattr(self, '_settings')

@@ -1,6 +1,7 @@
 import logging
 import os
 import datetime
+import re
 
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_login import LoginManager, login_required, login_user, logout_user
@@ -77,9 +78,13 @@ def runs():
     page = int(request.args.get('page', 1))
     query = Run.query.order_by(Run.creation.desc()).offset(page_size * (page - 1)).limit(20)
 
-    return render_template('runs.html', runs=query, page=page,
-                           previous_page=url_for('runs', page=max(page - 1, 1)),
-                           next_page=url_for('runs', page=page + 1))
+    page_previous = url_for('runs', page=page - 1) if page > 1 else None
+    page_next = url_for('runs', page=page + 1)
+
+    return render_template('runs.html', runs=query,
+                           page=page,
+                           page_previous=page_previous,
+                           page_next=page_next)
 
 
 @app.route('/run/<int:run_id>')
@@ -89,10 +94,20 @@ def run(run_id: int):
     if not this_run:
         return 404
 
-    tasks = [t for t in this_run.tasks if t.result != 'Passed']
+    show_all = request.args.get('show_all', 'False') == 'True'
+    query = request.args.get('query', '')
+
+    if show_all:
+        tasks = this_run.tasks
+    else:
+        tasks = [t for t in this_run.tasks if t.result != 'Passed']
+
+    if query:
+        tasks = [t for t in tasks if re.search(query, t.identifier)]
+
     tasks = sorted(tasks, key=lambda t: t.name)
 
-    return render_template('run.html', tasks=tasks)
+    return render_template('run.html', tasks=tasks, show_all=show_all, query=query)
 
 
 @app.route('/help', methods=['GET'])
