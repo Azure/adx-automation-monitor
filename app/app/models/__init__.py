@@ -70,7 +70,7 @@ class Task(db.Model):
 
     @property
     def identifier(self) -> str:
-        return self.settings_in_json['classifier']['identifier']
+        return self.settings_in_json['classifier']['identifier']  # pylint: disable=unsubscriptable-object
 
     @property
     def settings_in_json(self) -> dict:
