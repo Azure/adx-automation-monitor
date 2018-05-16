@@ -38,20 +38,16 @@
         {% if log %}
             <div class="row">
                 <div class="col">
-                    <div class="container">
-                        <h1 class="display-4 mt-3 mb-3">Automation Log</h1>
-                        <pre><code>{{ log }}</code></pre>
-                    </div>
+                    <h1 class="display-4 mt-3 mb-3 text-center">Automation Log</h1>
+                    <pre><code>{{ log }}</code></pre>
                 </div>
             </div>
         {% endif %}
         {% if record %}
             <div class="row">
                 <div class="col">
-                    <div class="container">
-                        <h1 class="display-4 mt-3 mb-3">Automation HTTP Record</h1>
-                        <pre><code class="yml">{{ record }}</code></pre>
-                    </div>
+                    <h1 class="display-4 mt-3 mb-3 text-center">Automation HTTP Record</h1>
+                    <pre><code class="yml">{{ record }}</code></pre>
                 </div>
             </div>
         {% endif %}
