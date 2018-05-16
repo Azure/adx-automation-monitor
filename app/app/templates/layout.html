@@ -26,8 +26,6 @@
             <li class="nav-item">
                 {% if current_user.is_authenticated %}
                     <a class="nav-link" href="{{ url_for('profile') }}">{{ current_user.user_name }}</a>
-                {% else %}
-                    <a class="nav-link" href="{{ url_for('login') }}">Log in</a>
                 {% endif %}
             </li>
         </ul>
@@ -40,10 +38,10 @@
     <div class="container">
         <div class="jumbotron">
             <h1 class="display-4">Please log in.</h1>
-            <p class="lead">You are not authenticated. Please use the log in link in the upper right of the page to
-                navigate to the log in page.</p>
-            <hr class="my-4">
-            <p class="lead">This page may redirect to the log in page automatically in 10 seconds.</p>
+            <p class="lead">You are not authenticated. </p>
+            {% if auth_link %}
+                <a class="btn btn-primary" href="{{ auth_link }}">Log in with Microsoft Account</a>
+            {% endif %}
         </div>
     </div>
 {% endif %}

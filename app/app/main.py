@@ -39,12 +39,14 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-    return redirect(url_for('login', requiest_uri=request.path))
+
+    return redirect(url_for('login', request_uri=request.url))
 
 
 @app.route('/login')
 def login():
-    return render_template('login.html', auth_link=get_authorization_url(url_for('index')))
+    callback_url = request.args.get('request_uri', url_for('index'))
+    return render_template('login.html', auth_link=get_authorization_url(callback_url))
 
 
 @app.route('/logout')

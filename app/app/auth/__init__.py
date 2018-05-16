@@ -1,6 +1,8 @@
 import os
 import base64
 
+from urllib.parse import quote
+
 from adal import AuthenticationContext
 from flask import url_for
 
@@ -12,8 +14,11 @@ RESOURCE = os.environ['AZURE_CLIENT_RESOURCE']
 
 def get_authorization_url(callback: str = '/') -> str:
     return f'https://login.microsoftonline.com/{TENANT}/oauth2/authorize?' \
-           f'response_type=code&client_id={CLIENT}&' \
-           f'redirect_uri={url_for("login_callback", _external=True)}&state={callback}&resource={RESOURCE}'
+           f'response_type=code&' \
+           f'client_id={CLIENT}&' \
+           f'redirect_uri={url_for("login_callback", _external=True)}&' \
+           f'state={quote(callback)}&' \
+           f'resource={RESOURCE}'
 
 
 def get_random_str(length_in_bytes: int = 32) -> str:
