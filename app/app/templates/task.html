@@ -1,4 +1,9 @@
 {% extends "layout.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+{% endblock %}
 {% block body %}
     <div class="jumbotron jumbotron-fluid mb-0">
         <div class="container">
@@ -31,7 +36,7 @@
     </div>
     <div class="container-fluid">
         {% if log %}
-            <div class="row log">
+            <div class="row">
                 <div class="col">
                     <div class="container">
                         <h1 class="display-4 mt-3 mb-3">Automation Log</h1>
@@ -41,14 +46,19 @@
             </div>
         {% endif %}
         {% if record %}
-            <div class="row rec">
+            <div class="row">
                 <div class="col">
                     <div class="container">
                         <h1 class="display-4 mt-3 mb-3">Automation HTTP Record</h1>
-                        <pre><code>{{ record }}</code></pre>
+                        <pre><code class="yml">{{ record }}</code></pre>
                     </div>
                 </div>
             </div>
         {% endif %}
     </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
