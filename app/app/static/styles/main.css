@@ -9,14 +9,21 @@ main {
 }
 
 table.condense {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Consolas', 'Menlo', monospace;
     font-size: small;
 }
 
 pre code {
-    font-size: 0.5rem;
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 0.75rem;
 }
 
 div.log {
-    background-color: beige;
+    background-color: #F5F1D5;
 }
+
+div.rec {
+    background-color: #B4D6C6;
+}
+
+/* https://color.adobe.com/Reduction-Design-color-theme-10741292/ */

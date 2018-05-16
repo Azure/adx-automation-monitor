@@ -1,51 +1,38 @@
 {% extends "layout.html" %}
 {% block body %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-1">Run {{ run.id }}</h1>
+            <p class="lead">{{ run.name }}</p>
+            {% if query %}
+                <p class="lead">The results are results of the query {{ query }}.</p>
+            {% endif %}
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="row">
-            <form class="mt-1 ml-1 col-12" method="get">
-                <div class="form-row">
-                    <div class="col">
-                        <label class="sr-only" for="query">Query</label>
-                        <input type="text" class="form-control mb-2 mr-sm-2"
-                               id="query" name="query"
-                               placeholder="Current query: {{ query or 'Empty' }}.">
-                    </div>
-                    <div class="col-auto mt-1 mb-2 mr-sm-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="inlineFormCheck" name="logs"
-                                   value="true">
-                            <label class="form-check-label" for="inlineFormCheck">
-                                Logs
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn btn-primary mb-2">Submit</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <table class="table table-sm table-hover ml-1 mb-1 mr-1">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Identifier</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for task in tasks %}
+            <div class="col">
+                <table class="table table-sm table-hover condense">
+                    <thead>
                     <tr>
-                        <td>{{ task.id }}</td>
-                        <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 40rem">
-                            {{ task.identifier }}
-                        </td>
-                        <td>{{ task.result }}</td>
+                        <th>ID</th>
+                        <th>Identifier</th>
+                        <th>Status</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td><a href="{{ url_for('task', task_id=task.id) }}">{{ task.id }}</a></td>
+                            <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 40rem">
+                                {{ task.identifier }}
+                            </td>
+                            <td>{{ task.result }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="row mt-5">
             {% for t in tasks %}

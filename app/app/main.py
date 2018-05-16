@@ -7,7 +7,7 @@ import requests
 from flask import Flask, render_template, redirect, url_for, request, session
 from flask_login import LoginManager, login_required, login_user, logout_user
 
-from app.models import User, db, Run
+from app.models import User, db, Run, Task
 from app.auth import get_authorization_url, acquire_token, get_logout_uri
 
 # pylint: disable=invalid-name
@@ -39,7 +39,6 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
-
     return redirect(url_for('login', request_uri=request.url))
 
 
@@ -114,7 +113,23 @@ def run(run_id: int):
 
     tasks = sorted(tasks, key=lambda t: t.name)
 
-    return render_template('run.html', tasks=tasks, logs=logs, query=query)
+    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query)
+
+
+@app.route('/task/<int:task_id>')
+@login_required
+def task(task_id: int):
+    this_task = Task.query.filter_by(id=task_id).first()
+    if not this_task:
+        return 404, 'not found'
+
+    resp = requests.get(this_task.log_path)
+    log = resp.text if resp.status_code < 300 else None
+
+    resp = requests.get(this_task.record_path)
+    rec = resp.text if resp.status_code < 300 else None
+
+    return render_template('task.html', task=this_task, record=rec, log=log)
 
 
 @app.route('/help', methods=['GET'])

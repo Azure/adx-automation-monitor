@@ -1,36 +1,56 @@
 {% extends "layout.html" %}
 {% block body %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-1">Runs</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid">
-        <table class="table table-hover table-sm">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for run in runs %}
-                <tr>
-                    <td><a href="{{ url_for('run', run_id=run.id) }}">{{ run.id }}</a></td>
-                    <td>{{ run.name }}</td>
-                    <td>{{ run.status }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div>
-            <nav>
-                <ul class="pagination justify-content-center">
-                    {% if page_previous %}
-                        <li class="page-item"><a class="page-link" href="{{ page_previous }}">Previous</a></li>
-                    {% else %}
-                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-                    {% endif %}
-                    <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
-                    <li class="page-item"><a class="page-link" href="{{ page_next }}">Next</a></li>
-                </ul>
-            </nav>
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover table-sm condense">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Creation (PDT)</th>
+                        <th>Remark</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for run in runs %}
+                        <tr>
+                            <td><a href="{{ url_for('run', run_id=run.id) }}">{{ run.id }}</a></td>
+                            <td>{{ run.product }}</td>
+                            <td>{{ run.image }}</td>
+                            <td>{{ run.creation.strftime('%b %d %H:%M') }}</td>
+                            <td>{{ run.remark }}</td>
+                            <td>{{ run.status }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div>
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            {% if page_previous %}
+                                <li class="page-item"><a class="page-link" href="{{ page_previous }}">Previous</a></li>
+                            {% else %}
+                                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                            {% endif %}
+                            <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+                            <li class="page-item"><a class="page-link" href="{{ page_next }}">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

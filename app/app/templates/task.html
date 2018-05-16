@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="jumbotron jumbotron-fluid mb-0">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-1">Task {{ task.id }}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <tr>
+                            <td>Identifier</td>
+                            <td>{{ task.identifier }}</td>
+                        </tr>
+                        <tr>
+                            <td>Result</td>
+                            <td>{{ task.result }}</td>
+                        </tr>
+                        <tr>
+                            <td>Duration (ms)</td>
+                            <td>{{ task.duration }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if log %}
+            <div class="row log">
+                <div class="col">
+                    <div class="container">
+                        <h1 class="display-4 mt-3 mb-3">Automation Log</h1>
+                        <pre><code>{{ log }}</code></pre>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if record %}
+            <div class="row rec">
+                <div class="col">
+                    <div class="container">
+                        <h1 class="display-4 mt-3 mb-3">Automation HTTP Record</h1>
+                        <pre><code>{{ record }}</code></pre>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

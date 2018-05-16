@@ -1,4 +1,4 @@
-# pylint: disable=unused-import, too-few-public-methods
+# pylint: disable=unused-import, too-few-public-methods, unsubscriptable-object
 
 import json
 
@@ -39,6 +39,32 @@ class Run(db.Model):
     # Completed.
     status = db.Column(db.String)
 
+    @property
+    def settings_in_json(self) -> dict:
+        if not hasattr(self, '_settings'):
+            setattr(self, '_settings', json.loads(self.settings))
+
+        return getattr(self, '_settings')
+
+    @property
+    def details_in_json(self) -> dict:
+        if not hasattr(self, '_details'):
+            setattr(self, '_details', json.loads(self.details))
+
+        return getattr(self, '_details')
+
+    @property
+    def product(self):
+        return self.details_in_json['a01.reserved.product']
+
+    @property
+    def remark(self):
+        return self.settings_in_json['a01.reserved.remark']
+
+    @property
+    def image(self):
+        return self.settings_in_json['a01.reserved.imagename']
+
 
 class Task(db.Model):
     # unique id
@@ -70,11 +96,15 @@ class Task(db.Model):
 
     @property
     def identifier(self) -> str:
-        return self.settings_in_json['classifier']['identifier']  # pylint: disable=unsubscriptable-object
+        return self.settings_in_json['classifier']['identifier']
 
     @property
     def log_path(self) -> str:
-        return self.result_in_json['a01.reserved.tasklogpath']  # pylint: disable=unsubscriptable-object
+        return self.result_in_json['a01.reserved.tasklogpath']
+
+    @property
+    def record_path(self) -> str:
+        return self.result_in_json['a01.reserved.taskrecordpath']
 
     @property
     def settings_in_json(self) -> dict:
