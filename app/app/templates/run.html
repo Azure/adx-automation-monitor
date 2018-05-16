@@ -23,7 +23,7 @@
                     <tbody>
                     {% for task in tasks %}
                         <tr>
-                            <td><a href="{{ url_for('task', task_id=task.id) }}">{{ task.id }}</a></td>
+                            <td><a href="{{ url_for('task', task_id=task.id) }}" target="_blank">{{ task.id }}</a></td>
                             <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 40rem">
                                 {{ task.identifier }}
                             </td>
