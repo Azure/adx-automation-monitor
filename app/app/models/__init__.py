@@ -55,11 +55,11 @@ class Run(db.Model):
 
     @property
     def product(self):
-        return self.details_in_json['a01.reserved.product']
+        return self.details_in_json.get('a01.reserved.product', 'N/A')
 
     @property
     def remark(self):
-        return self.settings_in_json['a01.reserved.remark']
+        return self.settings_in_json.get('a01.reserved.remark', 'N/A')
 
     @property
     def image(self):
