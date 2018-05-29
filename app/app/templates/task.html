@@ -7,31 +7,18 @@
 {% block body %}
     <div class="jumbotron jumbotron-fluid mb-0">
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h1 class="display-1">Task {{ task.id }}</h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <table class="table table-borderless">
-                        <tbody>
-                        <tr>
-                            <td>Identifier</td>
-                            <td>{{ task.identifier }}</td>
-                        </tr>
-                        <tr>
-                            <td>Result</td>
-                            <td>{{ task.result }}</td>
-                        </tr>
-                        <tr>
-                            <td>Duration (ms)</td>
-                            <td>{{ task.duration }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <h1 class="display-1">Task {{ task.id }}</h1>
+            <h3>
+                {% if task.result != 'Passed' %}
+                    <span class="badge badge-danger">{{ task.result }}</span>
+                {% else %}
+                    <span class="badge badge-success">{{ task.result }}</span>
+                {% endif %}
+                <span class="badge badge-info">Duration {{ task.duration / 1000 }} s</span>
+            </h3>
+            <h5>
+                <span class="badge badge-secondary">{{ task.identifier }}</span>
+            </h5>
         </div>
     </div>
     <div class="container-fluid">
