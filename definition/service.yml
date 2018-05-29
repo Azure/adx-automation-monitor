@@ -1,21 +1,4 @@
-#!/usr/bin/env bash
-
-az login --service-principal -u $AKS_MANAGE_SP_NAME \
-                             -p $AKS_MANAGE_SP_PASS \
-                             -t $AKS_MANAGE_SP_TENANT
-
-
-az aks install-cli --install-location ./kubectl
-az aks get-credentials -n $AKS_CLUSTER_NAME -g $AKS_CLUSTER_RG 
-
-
-build=$TRAVIS_BUILD_NUMBER
-branch=$TRAVIS_BRANCH
-host_env=A01_TARGET_HOST_$branch
-host_target=${!host_env}
-
-
-echo "apiVersion: apps/v1beta1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: monitor
@@ -31,7 +14,7 @@ spec:
     spec:
       containers:
       - name: main
-        image: adxautomationbase.azurecr.io/monitor:$branch-$build
+        image: {{ image-name }}
         ports:
         - containerPort: 80
         env:
@@ -66,7 +49,7 @@ spec:
               name: monitor-secrets
               key: client_resource
       imagePullSecrets:
-      - name: monitor-registry
+      - name: {{ container-registry-secret-name }}
 ---
 apiVersion: v1
 kind: Service
@@ -105,4 +88,3 @@ spec:
         backend:
           serviceName: monitor
           servicePort: 80
-" | ./kubectl apply --namespace a01-monitor-$branch -f -
