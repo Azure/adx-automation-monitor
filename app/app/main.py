@@ -99,6 +99,7 @@ def run(run_id: int):
     show_log = request.args.get('logs', 'False') == 'true'
     query = request.args.get('query', '')
 
+    total_tasks = len(this_run.tasks)
     tasks = [t for t in this_run.tasks if t.result != 'Passed']
 
     if query:
@@ -113,7 +114,7 @@ def run(run_id: int):
 
     tasks = sorted(tasks, key=lambda t: t.name)
 
-    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query)
+    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query,  total_tasks=total_tasks)
 
 
 @app.route('/task/<int:task_id>')

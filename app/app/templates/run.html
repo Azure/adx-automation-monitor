@@ -2,11 +2,24 @@
 {% block body %}
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-1">Run {{ run.id }}</h1>
-            <p class="lead">{{ run.name }}</p>
-            {% if query %}
-                <p class="lead">The results are results of the query {{ query }}.</p>
-            {% endif %}
+            <h1 class="display-1">Run {{ run.id }}
+            </h1>
+            <h3>
+                {% if run.remark.lower() == 'official' %}
+                    <span class="badge badge-primary">Official</span>
+                {% else %}
+                    <span class="badge badge-primary">{{ run.remark }}</span>
+                {% endif %}
+                <span class="badge badge-danger">Failure {{ tasks | length }}</span>
+                <span class="badge badge-info">Total {{ total_tasks }}</span>
+            </h3>
+            <h5>
+                <span class="badge badge-secondary">{{ run.creation.strftime('%Y/%m/%d %H:%M') }}</span>
+                <span class="badge badge-secondary">{{ run.image }}</span>
+                {% if query %}
+                    <span class="badge badge-secondaryu">Query {{ query }}.</span>
+                {% endif %}
+            </h5>
         </div>
     </div>
     <div class="container-fluid">
