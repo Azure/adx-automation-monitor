@@ -114,7 +114,7 @@ def run(run_id: int):
 
     tasks = sorted(tasks, key=lambda t: t.name)
 
-    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query,  total_tasks=total_tasks)
+    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query, total_tasks=total_tasks)
 
 
 @app.route('/task/<int:task_id>')
