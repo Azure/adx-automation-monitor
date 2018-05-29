@@ -7,15 +7,14 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" data-toggle="modal" data-target="#queryModal" href="#">Query</a>
-{#            <a class="dropdown-item" href="#">Email</a>#}
+            {#            <a class="dropdown-item" href="#">Email</a>#}
         </div>
     </li>
 {% endblock %}
 {% block body %}
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h1 class="display-1">Run {{ run.id }}
-            </h1>
+            <h1 class="display-1">Run <span class="display-4">{{ run.id }}</span></h1>
             <h3>
                 {% if run.remark.lower() == 'official' %}
                     <span class="badge badge-primary">Official</span>
@@ -24,6 +23,7 @@
                 {% endif %}
                 <span class="badge badge-danger">Failure {{ tasks | length }}</span>
                 <span class="badge badge-info">Total {{ total_tasks }}</span>
+                <span class="badge badge-info">{{ run.status }}</span>
             </h3>
             <h5>
                 <span class="badge badge-secondary">{{ run.creation.strftime('%Y/%m/%d %H:%M') }}</span>
@@ -41,6 +41,7 @@
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Category</th>
                         <th>Identifier</th>
                         <th>Status</th>
                     </tr>
@@ -49,8 +50,9 @@
                     {% for task in tasks %}
                         <tr>
                             <td><a href="{{ url_for('task', task_id=task.id) }}" target="_blank">{{ task.id }}</a></td>
+                            <td>{{ task.category }}</td>
                             <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 40rem">
-                                {{ task.identifier }}
+                                {{ task.short_name | default(task.identifier, true) }}
                             </td>
                             <td>{{ task.result }}</td>
                         </tr>

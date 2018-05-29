@@ -7,7 +7,7 @@
 {% block body %}
     <div class="jumbotron jumbotron-fluid mb-0">
         <div class="container">
-            <h1 class="display-1">Task {{ task.id }}</h1>
+            <h1 class="display-1">Task <span class="display-4">{{ task.id }}</span></h1>
             <h3>
                 {% if task.result != 'Passed' %}
                     <span class="badge badge-danger">{{ task.result }}</span>
@@ -15,9 +15,12 @@
                     <span class="badge badge-success">{{ task.result }}</span>
                 {% endif %}
                 <span class="badge badge-info">Duration {{ task.duration / 1000 }} s</span>
+                {% if task.category %}
+                    <span class="badge badge-warning">{{ task.category }}</span>
+                {% endif %}
             </h3>
             <h5>
-                <span class="badge badge-secondary">{{ task.identifier }}</span>
+                <span class="badge badge-secondary">{{ task.short_name | default(task.identifier, true) }}</span>
             </h5>
         </div>
     </div>

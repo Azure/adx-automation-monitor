@@ -119,3 +119,27 @@ class Task(db.Model):
             setattr(self, '_result', json.loads(self.result_details))
 
         return getattr(self, '_result')
+
+    @property
+    def category(self):
+        """The category of this task. The logic is hardcoded for now. In the future, the categorizing logic will become
+        configurable"""
+        if not self.identifier.startswith('azure.cli'):
+            return ''
+
+        if self.identifier.startswith('azure.cli.command_modules'):
+            return self.identifier.split('.')[3]
+        else:
+            return 'core'
+
+    @property
+    def short_name(self):
+        """The category of this task. The logic is hardcoded for now. In the future, the categorizing logic will become
+        configurable"""
+        if not self.identifier.startswith('azure.cli'):
+            return ''
+
+        if self.identifier.startswith('azure.cli.command_modules'):
+            return '.'.join(self.identifier.split('.')[6:])
+        else:
+            return '.'.join(self.identifier.split('.')[5:])
