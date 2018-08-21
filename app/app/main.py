@@ -136,7 +136,7 @@ def task(task_id: int):
 @app.route('/diagnose', methods=['GET'])
 def diagnose():
     try:
-        with open(os.path.join(app.root_path, 'app_version')) as fq:
+        with open(os.path.join(app.root_path, '..', 'app_version')) as fq:
             app_version = fq.read()
     except (OSError, IOError):
         app_version = 'Unknown'
