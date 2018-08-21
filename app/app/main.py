@@ -139,9 +139,28 @@ def diagnose():
         with open(os.path.join(app.root_path, '..', 'app_version')) as fq:
             app_version = fq.read()
     except (OSError, IOError):
-        app_version = 'Unknown'
+        app_version = None
 
-    return render_template('diagnose.html', data={"App Version": app_version})
+    try:
+        with open(os.path.join(app.root_path, '..', 'source_repo')) as fq:
+            source_repo = fq.read()
+            if source_repo.endswith('.git'):
+                source_repo = source_repo[:-4]
+
+            if source_repo:
+                commit_uri = f'{source_repo}/commit/{app_version}'
+            else:
+                commit_uri = None
+    except (OSError, IOError):
+        commit_uri = None
+
+    data = {}
+    if commit_uri:
+        data['App Version'] = {"Value": app_version, "URI": commit_uri}
+    elif app_version:
+        data['App Version'] = {"Value": app_version}
+
+    return render_template('diagnose.html', data=data)
 
 
 @app.route('/profile', methods=['GET'])

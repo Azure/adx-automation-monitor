@@ -23,7 +23,11 @@
                         <tbody>
                         <tr>
                             <td>{{ key }}</td>
-                            <td>{{ value }}</td>
+                            {% if "URI" in value %}
+                                <td><code><a href="{{ value["URI"] }}">{{ value["Value"] }}</a></code></td>
+                            {% else %}
+                                <td><code>{{ value["Value"] }}</code></td>
+                            {% endif %}
                         </tr>
                         </tbody>
                     </table>
