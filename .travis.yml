@@ -4,6 +4,7 @@ python:
 services:
 - docker
 install:
-- pip install -r requirements.txt
+- pip install -r pipenv
+- pipenv sync
 script:
-- pylint app/app
+- pipenv run pylint app/app

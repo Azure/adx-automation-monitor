@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "==2.18.4"
+"psycopg2-binary" = "==2.7.4"
+adal = "==0.5.1"
+Flask = "==1.0.2"
+Flask-Login = "==0.4.1"
+Flask-SQLAlchemy = "==2.3.1"
+
+[dev-packages]
+pylint = ">=2.0.0"
+wheel = "*"
+pip = "*"
