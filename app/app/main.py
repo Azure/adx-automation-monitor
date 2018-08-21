@@ -144,11 +144,8 @@ def diagnose():
     try:
         with open(os.path.join(app.root_path, '..', 'source_repo')) as fq:
             source_repo = fq.read()
-            if source_repo.endswith('.git'):
-                source_repo = source_repo[:-4]
-
             if source_repo:
-                commit_uri = f'{source_repo}/commit/{app_version}'
+                commit_uri = f'{source_repo[:-4]}/commit/{app_version}'
             else:
                 commit_uri = None
     except (OSError, IOError):
