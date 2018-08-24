@@ -114,7 +114,19 @@ def run(run_id: int):
 
     tasks = sorted(tasks, key=lambda t: t.name)
 
-    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query, total_tasks=total_tasks)
+    run_data = {
+        "id": this_run.id,
+        "status": this_run.status,
+        "remark": this_run.remark,
+        "image": this_run.image,
+        "failed_tasks_count": len(tasks),
+        "total_tasks_count": len(this_run.tasks),
+        "creation": this_run.creation.strftime('%Y/%m/%d %H:%M'),
+        "query": query
+    }
+
+    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query, total_tasks=total_tasks,
+                           run_data=run_data)
 
 
 @app.route('/task/<int:task_id>')

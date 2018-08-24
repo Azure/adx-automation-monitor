@@ -104,3 +104,8 @@ ENV/
 build/
 .idea/
 
+# Bower
+app/app/static/bower_components/
+
+# NPM
+node_modules/

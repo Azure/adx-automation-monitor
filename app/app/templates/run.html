@@ -12,29 +12,11 @@
     </li>
 {% endblock %}
 {% block body %}
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-1">Run <span class="display-4">{{ run.id }}</span></h1>
-            <h3>
-                {% if run.remark.lower() == 'official' %}
-                    <span class="badge badge-primary">Official</span>
-                {% else %}
-                    <span class="badge badge-primary">{{ run.remark }}</span>
-                {% endif %}
-                <span class="badge badge-danger">Failure {{ tasks | length }}</span>
-                <span class="badge badge-info">Total {{ total_tasks }}</span>
-                <span class="badge badge-info">{{ run.status }}</span>
-            </h3>
-            <h5>
-                <span class="badge badge-secondary">{{ run.creation.strftime('%Y/%m/%d %H:%M') }}</span>
-                <span class="badge badge-secondary">{{ run.image }}</span>
-                {% if query %}
-                    <span class="badge badge-secondary">Query {{ query }}.</span>
-                {% endif %}
-            </h5>
-        </div>
-    </div>
+    <div class="jumbotron jumbotron-fluid" id="run_summary"></div>
     <div class="container-fluid">
+        <div class="row" id='run_results'>
+
+        </div>
         <div class="row">
             <div class="col">
                 <table class="table table-sm table-hover condense">
@@ -105,4 +87,10 @@
         </div>
     </div>
 {% endblock %}
-
+{% block scripts %}
+    {{ super() }}
+    <script type="application/javascript">
+        var run_data = {{ run_data | tojson }}
+    </script>
+    <script src="{{ url_for('static', filename='js/run.js') }}" type="application/javascript"></script>
+{% endblock %}

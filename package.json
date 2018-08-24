@@ -1,0 +1,32 @@
+{
+  "name": "a01-front",
+  "version": "1.0.0",
+  "description": "This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -p",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azure/adx-automation-monitor.git"
+  },
+  "author": "Troy Dai (troy.dai@outlook.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Azure/adx-automation-monitor/issues"
+  },
+  "homepage": "https://github.com/Azure/adx-automation-monitor#readme",
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  }
+}
