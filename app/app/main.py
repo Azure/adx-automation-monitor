@@ -2,6 +2,7 @@ import logging
 import os
 import datetime
 import re
+import json
 
 import requests
 from flask import Flask, render_template, redirect, url_for, request, session
@@ -92,41 +93,34 @@ def runs():
 @app.route('/run/<int:run_id>')
 @login_required
 def run(run_id: int):
-    this_run = Run.query.filter_by(id=run_id).first()
-    if not this_run:
+    run = Run.query.filter_by(id=run_id).first()
+    if not run:
         return 404
 
-    show_log = request.args.get('logs', 'False') == 'true'
-    query = request.args.get('query', '')
-
-    total_tasks = len(this_run.tasks)
-    tasks = [t for t in this_run.tasks if t.result != 'Passed']
-
-    if query:
-        tasks = [t for t in tasks if re.search(query, t.identifier)]
-
-    logs = dict()
-    if show_log:
-        for t in tasks:
-            resp = requests.get(t.log_path)
-            if resp.status_code < 300:
-                logs[t.id] = resp.text
-
-    tasks = sorted(tasks, key=lambda t: t.name)
+    query = ""
 
     run_data = {
-        "id": this_run.id,
-        "status": this_run.status,
-        "remark": this_run.remark,
-        "image": this_run.image,
-        "failed_tasks_count": len(tasks),
-        "total_tasks_count": len(this_run.tasks),
-        "creation": this_run.creation.strftime('%Y/%m/%d %H:%M'),
-        "query": query
+        "id": run.id,
+        "status": run.status,
+        "remark": run.remark,
+        "image": run.image,
+        "failed_tasks_count": len([t for t in run.tasks if t.result != 'Passed']),
+        "total_tasks_count": len(run.tasks),
+        "creation": run.creation.strftime('%Y/%m/%d %H:%M'),
+        "query": query,
+        "link": url_for("run", run_id=run.id)
     }
 
-    return render_template('run.html', run=this_run, tasks=tasks, logs=logs, query=query, total_tasks=total_tasks,
-                           run_data=run_data)
+    tasks_data = [{
+        "id": task.id,
+        "category": task.category,
+        "identifier": task.short_name or task.identifier,
+        "result": task.result,
+        "link": url_for('task', task_id=task.id)
+    } for task in run.tasks]
+
+    data = json.dumps({"run": run_data, "tasks": tasks_data})
+    return render_template('run.html', data=data)
 
 
 @app.route('/task/<int:task_id>')

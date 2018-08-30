@@ -7,90 +7,20 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" data-toggle="modal" data-target="#queryModal" href="#">Query</a>
-            {#            <a class="dropdown-item" href="#">Email</a>#}
         </div>
     </li>
 {% endblock %}
 {% block body %}
     <div class="jumbotron jumbotron-fluid" id="run_summary"></div>
-    <div class="container-fluid">
-        <div class="row" id='run_results'>
-
-        </div>
-        <div class="row">
-            <div class="col">
-                <table class="table table-sm table-hover condense">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Category</th>
-                        <th>Identifier</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for task in tasks %}
-                        <tr>
-                            <td><a href="{{ url_for('task', task_id=task.id) }}" target="_blank">{{ task.id }}</a></td>
-                            <td>{{ task.category }}</td>
-                            <td style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 40rem">
-                                {{ task.short_name | default(task.identifier, true) }}
-                            </td>
-                            <td>{{ task.result }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row mt-5">
-            {% for t in tasks %}
-                {% if t.id in logs %}
-                    <div class="col ml-1 mt-1">
-                        <p class="lead">{{ t.identifier }}</p>
-                        <div class="log">
-                            <pre><code>{{ logs[t.id] }}</code></pre>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <form action="{{ url_for('run', run_id=run.id) }}" method="get">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Query tasks</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <input class="form-control" id="query" name="query"
-                                   aria-describedby="queryHelp" placeholder="Enter query">
-                            <small id="queryHelp" class="form-text text-muted">
-                                The query string filters results base on tasks' identifiers.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Query</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+    <div class="container-fluid" id="tasks_view"></div>
+    <div id="query_modal"></div>
 {% endblock %}
 {% block scripts %}
     {{ super() }}
     <script type="application/javascript">
-        var run_data = {{ run_data | tojson }}
+        let raw_data = {{data|safe}};
+        let run_data = raw_data.run;
+        let tasks_data = raw_data.tasks;
     </script>
-    <script src="{{ url_for('static', filename='js/run.js') }}" type="application/javascript"></script>
+    <script src="{{ url_for('static', filename='js/pageRun.js') }}" type="application/javascript"></script>
 {% endblock %}
