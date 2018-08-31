@@ -116,7 +116,8 @@ def run(run_id: int):
         "category": task.category,
         "identifier": task.short_name or task.identifier,
         "result": task.result,
-        "link": url_for('task', task_id=task.id)
+        "link": url_for('task', task_id=task.id),
+        "duration": task.duration,
     } for task in run.tasks]
 
     data = json.dumps({"run": run_data, "tasks": tasks_data})
