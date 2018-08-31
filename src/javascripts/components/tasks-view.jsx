@@ -1,4 +1,3 @@
-import { Table } from 'reactstrap';
 import TasksCollection from '../models/tasks-collection.js'
 import TaskFilterBadge from './task-filter.jsx'
 import { TaskCategoriesBadges, TaskCategoryResetBadge } from './task-category.jsx'
@@ -38,11 +37,11 @@ function TaskRow(props) {
 function TaskHeader(props) {
     return <thead>
         <tr>
-            <th>ID</th>
-            <th>Category</th>
-            <th>Identifier</th>
-            <th>Result</th>
-            <th>Duration</th>
+            <th onClick={() => props.toggleSort('id')}>ID</th>
+            <th onClick={() => props.toggleSort('category')}>Category</th>
+            <th onClick={() => props.toggleSort('identifier')}>Identifier</th>
+            <th onClick={() => props.toggleSort('result')}>Result</th>
+            <th onClick={() => props.toggleSort('duration')}>Duration</th>
         </tr>
     </thead>;
 }
@@ -93,6 +92,13 @@ export default class TasksView extends React.Component {
         });
     }
 
+    toggleSort(propertyName) {
+        this._tasks.sortBy = propertyName;  
+        this.setState({
+            tasks: this._tasks.tasks
+        });
+    }
+
     renderControlPanel() {
         return <div className="row mb-4">
             <div className="col">
@@ -111,7 +117,7 @@ export default class TasksView extends React.Component {
         return <div className="row">
             <div className="col">
                 <table className="table table-sm table-striped table-hover">
-                    <TaskHeader />
+                    <TaskHeader toggleSort={propertyName => this.toggleSort(propertyName)}/>
                     <TaskTableBody tasks={this.state.tasks} />
                 </table>
             </div>
