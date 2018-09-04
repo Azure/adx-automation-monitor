@@ -1,26 +1,21 @@
-{% extends "layout.html" %}
-{% block actions %}
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-            Actions
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" data-toggle="modal" data-target="#queryModal" href="#">Query</a>
-        </div>
-    </li>
-{% endblock %}
-{% block body %}
-    <div class="jumbotron jumbotron-fluid" id="run_summary"></div>
-    <div class="container-fluid" id="tasks_view"></div>
-    <div id="query_modal"></div>
-{% endblock %}
+{% extends "layouts/layout.v2.html" %}
+{#{% block actions %}#}
+{#    <li class="nav-item dropdown">#}
+{#        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"#}
+{#           aria-haspopup="true" aria-expanded="false">#}
+{#            Actions#}
+{#        </a>#}
+{#        <div class="dropdown-menu" aria-labelledby="navbarDropdown">#}
+{#            <a class="dropdown-item" data-toggle="modal" data-target="#queryModal" href="#">Query</a>#}
+{#        </div>#}
+{#    </li>#}
+{#{% endblock %}#}
+{#{% block body %}#}
+{#    <div class="jumbotron jumbotron-fluid" id="run_summary"></div>#}
+{#    <div class="container-fluid" id="tasks_view"></div>#}
+{#    <div id="query_modal"></div>#}
+{#{% endblock %}#}
 {% block scripts %}
     {{ super() }}
-    <script type="application/javascript">
-        let raw_data = {{data|safe}};
-        let run_data = raw_data.run;
-        let tasks_data = raw_data.tasks;
-    </script>
     <script src="{{ url_for('static', filename='js/pageRun.js') }}" type="application/javascript"></script>
 {% endblock %}

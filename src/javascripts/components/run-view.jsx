@@ -1,6 +1,4 @@
 import TasksCollection from '../models/tasks-collection.js'
-import TaskFilterBadge from './task-filter.jsx'
-import { TaskCategoriesBadges, TaskCategoryResetBadge } from './task-category.jsx'
 
 const identifier_style = {
     overflow: "hidden",
@@ -8,6 +6,40 @@ const identifier_style = {
     textOverflow: "ellipsis",
     maxWidth: "40rem"
 };
+
+function TaskCategoryBadge(props) {
+    let className = "badge badge-pill mr-1";
+    if (props.selected) {
+        className += " badge-dark"
+    } else {
+        className += " badge-secondary"
+    }
+
+    return <span className={className} onClick={() => props.onClick()}>{props.name}</span>
+}
+
+function TaskCategoriesBadges(props) {
+    return Array.from(props.categories).map(
+        each => <TaskCategoryBadge name={each}
+                                   selected={each == props.current_category}
+                                   onClick={() => props.onClick(each)}/>
+    )
+}
+
+function TaskCategoryResetBadge(props) {
+    return <span className="badge badge-pill badge-success mr-1" onClick={() => props.onClick()}>reset</span>
+}
+
+function TaskFilterBadge(props) {
+    let className = "badge badge-pill mr-1";
+    if (props.failed) {
+        className += " badge-danger";
+    } else {
+        className += " badge-success";
+    }
+
+    return <span className={className} onClick={() => props.onClick()}>{props.failed ? "failed" : "all"}</span>
+}
 
 function TaskRow(props) {
     let duration = props.task.duration
@@ -36,27 +68,29 @@ function TaskRow(props) {
 
 function TaskHeader(props) {
     return <thead>
-        <tr>
-            <th onClick={() => props.toggleSort('id')}>ID</th>
-            <th onClick={() => props.toggleSort('category')}>Category</th>
-            <th onClick={() => props.toggleSort('identifier')}>Identifier</th>
-            <th onClick={() => props.toggleSort('result')}>Result</th>
-            <th onClick={() => props.toggleSort('duration')}>Duration</th>
-        </tr>
+    <tr>
+        <th onClick={() => props.toggleSort('id')}>ID</th>
+        <th onClick={() => props.toggleSort('category')}>Category</th>
+        <th onClick={() => props.toggleSort('identifier')}>Identifier</th>
+        <th onClick={() => props.toggleSort('result')}>Result</th>
+        <th onClick={() => props.toggleSort('duration')}>Duration</th>
+    </tr>
     </thead>;
 }
 
 function TaskTableBody(props) {
-    let content = props.tasks.map(each => <TaskRow task={each} />);
+    let content = props.tasks.map(each => <TaskRow task={each}/>);
 
-    return <tbody style={{ fontSize: "small" }}>
-        {content}
+    return <tbody style={{fontSize: "small"}}>
+    {content}
     </tbody>
 }
 
-export default class TasksView extends React.Component {
+export default class RunView extends React.Component {
     constructor(props) {
         super(props);
+        this.data = pageData.entity.data;
+
         this._tasks = new TasksCollection(props.tasks, props.failed_only, props.category);
         this.state = {
             query: props.query,
@@ -93,7 +127,7 @@ export default class TasksView extends React.Component {
     }
 
     toggleSort(propertyName) {
-        this._tasks.sortBy = propertyName;  
+        this._tasks.sortBy = propertyName;
         this.setState({
             tasks: this._tasks.tasks
         });
@@ -103,11 +137,11 @@ export default class TasksView extends React.Component {
         return <div className="row mb-4">
             <div className="col">
                 <div className="container">
-                    <TaskFilterBadge failed={this.state.failed_only} onClick={() => this.toggleFailedOnly()} />
+                    <TaskFilterBadge failed={this.state.failed_only} onClick={() => this.toggleFailedOnly()}/>
                     <TaskCategoriesBadges categories={this.state.categories}
-                        current_category={this.state.category}
-                        onClick={(category) => this.toggleCategory(category)} />
-                    <TaskCategoryResetBadge onClick={() => this.toggleCategory("")} />
+                                          current_category={this.state.category}
+                                          onClick={(category) => this.toggleCategory(category)}/>
+                    <TaskCategoryResetBadge onClick={() => this.toggleCategory("")}/>
                 </div>
             </div>
         </div>;
@@ -118,7 +152,7 @@ export default class TasksView extends React.Component {
             <div className="col">
                 <table className="table table-sm table-striped table-hover">
                     <TaskHeader toggleSort={propertyName => this.toggleSort(propertyName)}/>
-                    <TaskTableBody tasks={this.state.tasks} />
+                    <TaskTableBody tasks={this.state.tasks}/>
                 </table>
             </div>
         </div>
@@ -129,7 +163,7 @@ export default class TasksView extends React.Component {
             <div>
                 {this.renderControlPanel()}
                 {this.renderTasksViewTable()}
-            </div >
+            </div>
         );
     }
 }

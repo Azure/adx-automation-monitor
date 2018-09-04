@@ -1,10 +1,18 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
-import TasksView from './components/tasks-view.jsx';
-import RunSummaryView from './components/run-summary-view.jsx';
-import QueryModal from './components/tasks-query.jsx';
+// import RunView from './components/run-view.jsx';
+// import QueryModal from './components/tasks-query.jsx';
+
+import Navbar from './components/navbar.jsx';
+import GeneralHeader from './components/general-header.jsx';
 
 
+// ReactDOM.render(<RunView tasks={tasks_data} failed_only={true} category=""/>, document.getElementById('tasks_view'));
+// ReactDOM.render(<QueryModal/>, document.getElementById('query_modal'));
 
-ReactDOM.render(<RunSummaryView/>, document.getElementById('run_summary'));
-ReactDOM.render(<TasksView tasks={tasks_data} failed_only={true} category="" />, document.getElementById('tasks_view'));
-ReactDOM.render(<QueryModal/>, document.getElementById('query_modal'));
+const mainBody = <div>
+    <GeneralHeader />
+</div>;
+
+ReactDOM.render(<Navbar/>, document.getElementById('nav'));
+ReactDOM.render(mainBody, document.getElementById('main'));

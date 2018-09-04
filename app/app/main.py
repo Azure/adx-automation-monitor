@@ -6,7 +6,7 @@ import json
 
 import requests
 from flask import Flask, render_template, redirect, url_for, request, session
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from app.models import User, db, Run, Task
 from app.auth import get_authorization_url, acquire_token, get_logout_uri
@@ -99,28 +99,47 @@ def run(run_id: int):
 
     query = ""
 
-    run_data = {
-        "id": run.id,
-        "status": run.status,
-        "remark": run.remark,
-        "image": run.image,
-        "failed_tasks_count": len([t for t in run.tasks if t.result != 'Passed']),
-        "total_tasks_count": len(run.tasks),
-        "creation": run.creation.strftime('%Y/%m/%d %H:%M'),
-        "query": query,
-        "link": url_for("run", run_id=run.id)
+    entity = {
+        "metadata": {
+            "type": "Run",
+            "id": run.id,
+            "query": query,
+            "link": url_for("run", run_id=run.id),
+            "tags": {
+                "major": [
+                    {"value": run.remark, "type": "primary"},
+                    {"value": f"Failure {len([_ for t in run.tasks if t.result != 'Passed'])}", "type": "danger"},
+                    {"value": f"Total {len(run.tasks)}"},
+                    {"value": run.status},
+                ],
+                "minor": [
+                    {"value": run.creation.strftime('%Y/%m/%d %H:%M')},
+                    {"value": run.image},
+                ]
+            }
+        },
+        "data:": {
+            "content": [{
+                "id": t.id,
+                "category": t.category,
+                "identifier": t.short_name or t.identifier,
+                "result": t.result,
+                "link": url_for('task', task_id=t.id),
+                "duration": t.duration,
+            } for t in run.tasks]
+        }
     }
 
-    tasks_data = [{
-        "id": task.id,
-        "category": task.category,
-        "identifier": task.short_name or task.identifier,
-        "result": task.result,
-        "link": url_for('task', task_id=task.id),
-        "duration": task.duration,
-    } for task in run.tasks]
+    user = {
+        'is_authenticated': current_user.is_authenticated,
+        'name': current_user.user_name,
+    }
 
-    data = json.dumps({"run": run_data, "tasks": tasks_data})
+    links = [{'name': 'Runs', 'link': url_for('runs')},
+             {'name': 'Diagnose', 'link': url_for('diagnose')}]
+
+    data = json.dumps({"entity": entity, "user": user, "links": links})
+
     return render_template('run.html', data=data)
 
 
